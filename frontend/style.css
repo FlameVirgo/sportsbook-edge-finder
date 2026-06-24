@@ -1,0 +1,83 @@
+body {
+  font-family: -apple-system, Helvetica, Arial, sans-serif;
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #1a1a1a;
+}
+
+h1 {
+  font-size: 1.4rem;
+}
+
+section {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+label {
+  font-size: 0.85rem;
+  color: #444;
+}
+
+select, input, button {
+  font-size: 0.95rem;
+  padding: 0.4rem;
+}
+
+button {
+  cursor: pointer;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+}
+
+button:hover {
+  background: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+#sharp-reference-banner {
+  font-size: 0.9rem;
+  color: #333;
+  background: #f3f3f3;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+.best-edge-row {
+  background: #d4f7d4;
+  font-weight: bold;
+}
+
+.negative-edge-row {
+  color: #999;
+}
+
+#parlay-structural-edge {
+  margin-top: 0.75rem;
+  font-weight: bold;
+}
