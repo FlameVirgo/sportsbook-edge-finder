@@ -1,0 +1,46 @@
+# Sportsbook Edge Finder
+
+Pick a specific bet (e.g. "Vinicius Jr. shots on target, Brazil vs Scotland"), and this tool compares that market's odds across sportsbooks, de-vigs the sharpest book's line to recover a true probability estimate, and ranks the other books by expected value (EV) and Kelly-optimal stake size — surfacing whichever book offers the bettor the most edge.
+
+Also includes a basic correlated 2-leg parlay calculator for DFS pick'em products (Underdog/PrizePicks-style), showing how correlation between legs changes the true joint probability versus the platform's naive independent assumption.
+
+## Stack
+
+- Backend: Python, FastAPI
+- Frontend: plain HTML/CSS/vanilla JS — no build step, no framework
+- Data: mock odds data behind a swappable `OddsProvider` interface (see `backend/odds_provider.py`) — a real odds API can be plugged in later without touching the math layer
+
+## Running locally
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn backend.main:app --reload --port 8000
+```
+
+Open `http://localhost:8000`.
+
+## How it works
+
+1. **Odds → implied probability**: American or decimal odds converted to implied probability (`backend/odds_math.py`)
+2. **De-vig**: the sharp reference book's line (flagged `is_sharp` in `backend/mock_data.py`, e.g. Pinnacle) is de-vigged using the multiplicative method to recover a fair probability (`backend/devig.py`). You can override this with your own probability estimate instead.
+3. **EV**: `EV = p_true * decimal_odds - 1` for every other (soft) book on the same market (`backend/kelly.py`)
+4. **Kelly sizing**: full Kelly fraction `(p*d - 1) / (d - 1)`, with quarter/half/full multiplier options and a recommended stake in dollars given your bankroll
+5. **Correlated parlay**: for 2-leg DFS parlays, `P(both hit) = p1*p2 + rho*sqrt(p1*(1-p1)*p2*(1-p2))` compared against the platform's naive independent pricing (`backend/correlation.py`)
+
+The orchestration logic lives in `backend/analysis.py`.
+
+## API
+
+- `GET /api/events` — events/markets/outcomes for the UI dropdowns
+- `GET /api/analyze` — per-book EV/edge/Kelly table for a selected event/market/outcome
+- `POST /api/parlay/correlated` — independent vs. correlated 2-leg parlay comparison
+
+## Scope notes
+
+- De-vig method: multiplicative only for now. Power and Shin's method are intentionally left as a strategy slot (`DevigMethod` enum in `backend/devig.py`) for later.
+- DFS correlation: 2-leg only, with a manually supplied correlation estimate — not a full copula/Monte Carlo model over N legs.
+- Odds data: mock data only; no live sportsbook integration yet.
+
+See `PLAN.md` for the original design plan.
