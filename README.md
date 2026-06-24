@@ -8,7 +8,7 @@ Also includes a basic correlated 2-leg parlay calculator for DFS pick'em product
 
 - Backend: Python, FastAPI
 - Frontend: plain HTML/CSS/vanilla JS — no build step, no framework
-- Data: mock odds data behind a swappable `OddsProvider` interface (see `backend/odds_provider.py`) — a real odds API can be plugged in later without touching the math layer
+- Data: mock odds data behind a swappable `OddsProvider` interface (see `backend/odds_provider.py`), plus an optional live provider backed by [The Odds API](https://the-odds-api.com)
 
 ## Running locally
 
@@ -20,6 +20,17 @@ uvicorn backend.main:app --reload --port 8000
 ```
 
 Open `http://localhost:8000`.
+
+### Live odds (optional)
+
+By default the app runs entirely on mock data. To pull real moneyline odds from The Odds API alongside the mock player-prop demos:
+
+```bash
+cp .env.example .env
+# edit .env and set ODDS_API_KEY=<your key>
+```
+
+`.env` is git-ignored — never commit your key. With `ODDS_API_KEY` set, `/api/events` returns the mock demo events plus live events (prefixed `live_`) for the sports listed in `ODDS_API_SPORTS`. Live integration is scoped to moneyline (`h2h`) markets only — spreads/totals quote different point lines per book, which breaks the "same outcomes across books" comparison the analysis relies on. Player props remain mock-only since they require The Odds API's separate per-event endpoint and aren't available on all plans. Events are fetched once per process; restart the server to refresh live odds.
 
 ## How it works
 
@@ -41,6 +52,6 @@ The orchestration logic lives in `backend/analysis.py`.
 
 - De-vig method: multiplicative only for now. Power and Shin's method are intentionally left as a strategy slot (`DevigMethod` enum in `backend/devig.py`) for later.
 - DFS correlation: 2-leg only, with a manually supplied correlation estimate — not a full copula/Monte Carlo model over N legs.
-- Odds data: mock data only; no live sportsbook integration yet.
+- Odds data: live moneyline odds via The Odds API (optional, see above) merged with mock player-prop/spread demos; spreads/totals and player props are not yet live.
 
 See `PLAN.md` for the original design plan.
