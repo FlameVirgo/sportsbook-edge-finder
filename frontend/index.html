@@ -16,7 +16,7 @@
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #60a5fa;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
         Sportsbook Edge Finder
       </h1>
-      <p>Compare real-time and mock odds across sportsbooks, de-vig reference lines, and calculate Kelly stake sizes to maximize your betting edge.</p>
+      <p>Compare live sportsbook odds, de-vig the sharp reference line, and size your stake with Kelly — all in real time.</p>
     </header>
 
     <div class="dashboard-grid">
@@ -27,26 +27,13 @@
           Configure Bet
         </h2>
         <div class="field-row">
-          <label for="sport-select">Sport</label>
-          <select id="sport-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="event-select">Game</label>
-          <select id="event-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="market-select">Bet</label>
-          <select id="market-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="outcome-select">Outcome</label>
-          <select id="outcome-select"></select>
-        </div>
-        <div class="field-row">
           <label for="bankroll">Bankroll ($)</label>
           <input type="number" id="bankroll" value="1000" min="0" step="50" />
         </div>
-        <button id="analyze-btn">Find Best Edge</button>
+        <div id="sport-tabs" class="sport-tabs"></div>
+        <div id="game-list" class="game-list">
+          <p class="game-list-empty">Loading live games…</p>
+        </div>
       </section>
 
       <!-- Results Panel -->
@@ -55,7 +42,7 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
           Edge Analysis Results
         </h2>
-        <div id="sharp-reference-banner">Select an event and click "Find Best Edge" to compute value bets.</div>
+        <div id="sharp-reference-banner">Pick a side from a game card to see how the books compare.</div>
         <div id="bankroll-recommendation"></div>
         <div class="table-container" style="overflow-x: auto;">
           <table id="results-table">

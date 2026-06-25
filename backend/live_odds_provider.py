@@ -88,18 +88,20 @@ class TheOddsApiProvider(OddsProvider):
                 if market is None:
                     continue
                 result.append({
-                    "event_id": f"live_{event['id']}",
+                    "event_id": event["id"],
                     "event_label": f"{event['home_team']} vs {event['away_team']}",
+                    "home_team": event["home_team"],
+                    "away_team": event["away_team"],
+                    "commence_time": event["commence_time"],
                     "sport": SPORT_LABELS.get(sport, sport),
                     "markets": [market],
                 })
         return result
 
     def get_market(self, event_id: str, market_id: str) -> dict:
-        raw_id = event_id[len("live_"):] if event_id.startswith("live_") else event_id
         for sport in self.sports:
             for event in self._fetch_sport(sport):
-                if event["id"] != raw_id:
+                if event["id"] != event_id:
                     continue
                 market = self._build_market(event)
                 if market is not None and market["market_id"] == market_id:

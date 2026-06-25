@@ -274,3 +274,122 @@ tr:hover td {
   font-size: 0.9rem;
   color: var(--text-muted);
 }
+
+/* Sport tabs */
+.sport-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.sport-tab {
+  width: auto;
+  flex-shrink: 0;
+  background: var(--input-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--input-border);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.sport-tab:hover {
+  filter: none;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.sport-tab.active {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+/* Game list / cards */
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.game-list-empty {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.game-card {
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  background: #ffffff;
+}
+
+.game-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.game-time {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.game-market-label {
+  font-size: 0.7rem;
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  gap: 0.75rem;
+}
+
+.team-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.odds-btn {
+  width: auto;
+  flex-shrink: 0;
+  min-width: 68px;
+  background: var(--table-header-bg);
+  color: var(--accent-color);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.odds-btn:hover {
+  filter: none;
+  border-color: var(--accent-color);
+}
+
+.odds-btn.selected {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+}

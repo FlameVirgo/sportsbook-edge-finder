@@ -8,18 +8,19 @@ from backend.analysis import analyze_market
 from backend.devig import DevigMethod
 from backend.live_odds_provider import TheOddsApiProvider
 from backend.models import AnalysisResult
-from backend.odds_provider import CompositeOddsProvider, MockOddsProvider
 
 load_dotenv()
 
 app = FastAPI(title="Sportsbook Edge Finder")
 
 _api_key = os.environ.get("ODDS_API_KEY")
-if _api_key:
-    _sports = os.environ.get("ODDS_API_SPORTS", "americanfootball_nfl,basketball_nba,soccer_epl").split(",")
-    provider = CompositeOddsProvider(MockOddsProvider(), TheOddsApiProvider(_api_key, _sports))
-else:
-    provider = MockOddsProvider()
+if not _api_key:
+    raise RuntimeError(
+        "ODDS_API_KEY is not set. This app requires a live odds API key — "
+        "copy .env.example to .env and set ODDS_API_KEY=<your key>."
+    )
+_sports = os.environ.get("ODDS_API_SPORTS", "americanfootball_nfl,basketball_nba,soccer_epl").split(",")
+provider = TheOddsApiProvider(_api_key, _sports)
 
 
 @app.get("/api/events")
