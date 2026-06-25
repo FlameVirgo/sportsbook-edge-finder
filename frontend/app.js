@@ -205,7 +205,6 @@ tabValueBets.addEventListener("click", () => switchTab("value-bets"));
 tabArbitrage.addEventListener("click", () => switchTab("arbitrage"));
 
 // Bankroll syncing
-const bankrollInput = document.getElementById("bankroll");
 const arbBankrollInput = document.getElementById("arb-bankroll");
 
 bankrollInput.addEventListener("input", (e) => {
