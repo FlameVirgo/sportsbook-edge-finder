@@ -93,15 +93,39 @@ async function runAnalysis() {
   renderResults(await res.json());
 }
 
+function renderRecommendation(data) {
+  const box = document.getElementById("bankroll-recommendation");
+  const best = data.rows[0];
+  const bankroll = parseFloat(document.getElementById("bankroll").value) || 0;
+
+  if (!best || best.edge <= 0) {
+    box.className = "no-edge";
+    box.innerHTML = `
+      <div class="rec-headline">No positive-EV bet found</div>
+      <div class="rec-detail">Every book's price is at or below the true probability for "${data.selected_outcome}" — sit this one out rather than bet into a -EV line.</div>
+    `;
+    return;
+  }
+
+  const pctOfBankroll = bankroll > 0 ? (best.recommended_stake / bankroll) * 100 : 0;
+  box.className = "has-edge";
+  box.innerHTML = `
+    <div class="rec-headline">Bet $${best.recommended_stake.toFixed(2)} on ${best.book}</div>
+    <div class="rec-detail">${pctOfBankroll.toFixed(2)}% of your $${bankroll.toFixed(2)} bankroll, full Kelly · ${pct(best.edge)} edge at ${best.american_odds > 0 ? "+" : ""}${best.american_odds} (${best.decimal_odds.toFixed(3)} decimal)</div>
+  `;
+}
+
 function renderResults(data) {
   const banner = document.getElementById("sharp-reference-banner");
   banner.textContent = `True probability for "${data.selected_outcome}" sourced from ${data.p_true_source} → ${pct(data.p_true)}`;
+
+  renderRecommendation(data);
 
   const body = document.getElementById("results-body");
   body.innerHTML = "";
   data.rows.forEach((row, index) => {
     const tr = document.createElement("tr");
-    if (index < 3) tr.classList.add("best-edge-row");
+    if (index < 3 && row.edge > 0) tr.classList.add("best-edge-row");
     if (row.edge < 0) tr.classList.add("negative-edge-row");
     tr.innerHTML = `
       <td>${row.book}</td>

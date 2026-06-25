@@ -235,3 +235,42 @@ tr:hover td {
   color: var(--text-muted);
   opacity: 0.6;
 }
+
+/* Bankroll recommendation callout */
+#bankroll-recommendation {
+  display: none;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+#bankroll-recommendation.has-edge {
+  display: block;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+#bankroll-recommendation.no-edge {
+  display: block;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+#bankroll-recommendation .rec-headline {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+#bankroll-recommendation.has-edge .rec-headline {
+  color: #047857;
+}
+
+#bankroll-recommendation.no-edge .rec-headline {
+  color: #b91c1c;
+}
+
+#bankroll-recommendation .rec-detail {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
