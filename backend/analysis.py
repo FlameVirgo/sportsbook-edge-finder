@@ -1,7 +1,7 @@
 from typing import Optional
 
 from backend.devig import DevigMethod, devig
-from backend.kelly import KELLY_MULTIPLIERS, ev_per_unit, fractional_kelly_stake, full_kelly_fraction
+from backend.kelly import ev_per_unit, full_kelly_fraction, kelly_stake
 from backend.models import AnalysisResult, BookRow
 from backend.odds_math import american_to_decimal, implied_prob_from_american, implied_prob_from_decimal
 from backend.odds_provider import OddsProvider
@@ -14,7 +14,6 @@ def analyze_market(
     provider: OddsProvider,
     devig_method: DevigMethod = DevigMethod.MULTIPLICATIVE,
     user_true_prob_override: Optional[float] = None,
-    kelly_multiplier: str = "quarter",
     bankroll: float = 1000.0,
 ) -> AnalysisResult:
     market = provider.get_market(event_id, market_id)
@@ -29,8 +28,6 @@ def analyze_market(
         p_true = sharp_fair[market["outcomes"].index(selected_outcome)]
         source = f"sharp_reference:{sharp_book['book']}"
 
-    multiplier = KELLY_MULTIPLIERS[kelly_multiplier]
-
     rows = []
     for book in market["books"]:
         if book["book"] == sharp_book["book"]:
@@ -40,7 +37,7 @@ def analyze_market(
         implied = implied_prob_from_decimal(d)
         ev = ev_per_unit(p_true, d)
         full_k = full_kelly_fraction(p_true, d)
-        stake = fractional_kelly_stake(full_k, multiplier, bankroll)
+        stake = kelly_stake(full_k, bankroll)
         rows.append(BookRow(
             book=book["book"], american_odds=american, decimal_odds=d,
             implied_prob=implied, ev=ev, edge=ev,

@@ -57,7 +57,6 @@ async function runAnalysis() {
     event_id: eventSelect.value,
     market_id: marketSelect.value,
     outcome: outcomeSelect.value,
-    kelly_multiplier: document.getElementById("kelly-multiplier").value,
     bankroll: document.getElementById("bankroll").value,
   });
   const userProb = document.getElementById("user-prob-override").value;

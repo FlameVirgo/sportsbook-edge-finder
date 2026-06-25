@@ -35,7 +35,7 @@ cp .env.example .env
 1. **Odds → implied probability**: American or decimal odds converted to implied probability (`backend/odds_math.py`)
 2. **De-vig**: the sharp reference book's line (flagged `is_sharp` in `backend/mock_data.py`, e.g. Pinnacle) is de-vigged using the multiplicative method to recover a fair probability (`backend/devig.py`). You can override this with your own probability estimate instead.
 3. **EV**: `EV = p_true * decimal_odds - 1` for every other (soft) book on the same market (`backend/kelly.py`)
-4. **Kelly sizing**: full Kelly fraction `(p*d - 1) / (d - 1)`, with quarter/half/full multiplier options and a recommended stake in dollars given your bankroll
+4. **Kelly sizing**: full Kelly fraction `(p*d - 1) / (d - 1)` and a recommended stake in dollars given your bankroll
 
 The orchestration logic lives in `backend/analysis.py`.
 

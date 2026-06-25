@@ -35,13 +35,10 @@ def get_analysis(
     outcome: str,
     devig_method: DevigMethod = DevigMethod.MULTIPLICATIVE,
     user_prob: Optional[float] = None,
-    kelly_multiplier: str = "quarter",
     bankroll: float = 1000.0,
 ):
     if user_prob is not None and not (0 <= user_prob <= 1):
         raise HTTPException(status_code=422, detail="user_prob must be between 0 and 1")
-    if kelly_multiplier not in ("quarter", "half", "full"):
-        raise HTTPException(status_code=422, detail="kelly_multiplier must be quarter, half, or full")
 
     try:
         market = provider.get_market(event_id, market_id)
@@ -58,7 +55,6 @@ def get_analysis(
         provider=provider,
         devig_method=devig_method,
         user_true_prob_override=user_prob,
-        kelly_multiplier=kelly_multiplier,
         bankroll=bankroll,
     )
 

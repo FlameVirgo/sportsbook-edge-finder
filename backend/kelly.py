@@ -1,6 +1,3 @@
-KELLY_MULTIPLIERS = {"quarter": 0.25, "half": 0.5, "full": 1.0}
-
-
 def ev_per_unit(p_true: float, decimal_odds: float) -> float:
     return p_true * decimal_odds - 1
 
@@ -15,5 +12,5 @@ def full_kelly_fraction(p_true: float, decimal_odds: float) -> float:
     return max(f, 0.0)
 
 
-def fractional_kelly_stake(full_kelly_pct: float, multiplier: float, bankroll: float) -> float:
-    return full_kelly_pct * multiplier * bankroll
+def kelly_stake(full_kelly_pct: float, bankroll: float) -> float:
+    return full_kelly_pct * bankroll
