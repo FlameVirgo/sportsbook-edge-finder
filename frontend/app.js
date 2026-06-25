@@ -79,9 +79,9 @@ function renderResults(data) {
 
   const body = document.getElementById("results-body");
   body.innerHTML = "";
-  for (const row of data.rows) {
+  data.rows.forEach((row, index) => {
     const tr = document.createElement("tr");
-    if (row.book === data.best_book) tr.classList.add("best-edge-row");
+    if (index < 3) tr.classList.add("best-edge-row");
     if (row.edge < 0) tr.classList.add("negative-edge-row");
     tr.innerHTML = `
       <td>${row.book}</td>
@@ -94,7 +94,7 @@ function renderResults(data) {
       <td>$${row.recommended_stake.toFixed(2)}</td>
     `;
     body.appendChild(tr);
-  }
+  });
 }
 
 eventSelect.addEventListener("change", onEventChange);
