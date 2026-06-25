@@ -79,10 +79,6 @@ async function runAnalysis() {
     outcome: outcomeSelect.value,
     bankroll: document.getElementById("bankroll").value,
   });
-  const userProb = document.getElementById("user-prob-override").value;
-  if (userProb !== "") {
-    params.set("user_prob", userProb);
-  }
 
   const res = await fetch(`/api/analyze?${params.toString()}`);
   if (!res.ok) {

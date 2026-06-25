@@ -1,5 +1,4 @@
 import os
-from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -34,12 +33,8 @@ def get_analysis(
     market_id: str,
     outcome: str,
     devig_method: DevigMethod = DevigMethod.MULTIPLICATIVE,
-    user_prob: Optional[float] = None,
     bankroll: float = 1000.0,
 ):
-    if user_prob is not None and not (0 <= user_prob <= 1):
-        raise HTTPException(status_code=422, detail="user_prob must be between 0 and 1")
-
     try:
         market = provider.get_market(event_id, market_id)
     except KeyError:
@@ -54,7 +49,6 @@ def get_analysis(
         selected_outcome=outcome,
         provider=provider,
         devig_method=devig_method,
-        user_true_prob_override=user_prob,
         bankroll=bankroll,
     )
 

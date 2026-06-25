@@ -1,5 +1,3 @@
-from typing import Optional
-
 from backend.devig import DevigMethod, devig
 from backend.kelly import ev_per_unit, full_kelly_fraction, kelly_stake
 from backend.models import AnalysisResult, BookRow
@@ -13,20 +11,15 @@ def analyze_market(
     selected_outcome: str,
     provider: OddsProvider,
     devig_method: DevigMethod = DevigMethod.MULTIPLICATIVE,
-    user_true_prob_override: Optional[float] = None,
     bankroll: float = 1000.0,
 ) -> AnalysisResult:
     market = provider.get_market(event_id, market_id)
     sharp_book = next(b for b in market["books"] if b["is_sharp"])
 
-    if user_true_prob_override is not None:
-        p_true = user_true_prob_override
-        source = "user_override"
-    else:
-        sharp_implied = [implied_prob_from_american(sharp_book["odds"][o]) for o in market["outcomes"]]
-        sharp_fair = devig(sharp_implied, devig_method)
-        p_true = sharp_fair[market["outcomes"].index(selected_outcome)]
-        source = f"sharp_reference:{sharp_book['book']}"
+    sharp_implied = [implied_prob_from_american(sharp_book["odds"][o]) for o in market["outcomes"]]
+    sharp_fair = devig(sharp_implied, devig_method)
+    p_true = sharp_fair[market["outcomes"].index(selected_outcome)]
+    source = f"sharp_reference:{sharp_book['book']}"
 
     rows = []
     for book in market["books"]:
