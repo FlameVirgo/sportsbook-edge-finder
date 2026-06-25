@@ -17,7 +17,7 @@
   border: 1px solid var(--card-border);
   border-radius: 10px;
   padding: 0.75rem 1rem;
-  background: #ffffff;
+  background: var(--card-bg);
 }
 
 .gameCardHeader {
@@ -40,7 +40,7 @@
 .gameMarketLabel {
   font-size: 0.7rem;
   color: var(--accent-color);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .teamRow {
@@ -51,17 +51,27 @@
   gap: 0.75rem;
 }
 
+.teamInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
 .teamName {
   font-size: 0.92rem;
   font-weight: 600;
   color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .oddsBtn {
   width: auto;
   flex-shrink: 0;
   min-width: 68px;
-  background: var(--table-header-bg);
+  background: var(--input-bg);
   color: var(--accent-color);
   border: 1px solid var(--input-border);
   border-radius: 8px;
@@ -74,10 +84,11 @@
 .oddsBtn:hover {
   filter: none;
   border-color: var(--accent-color);
+  background: var(--hover-bg);
 }
 
 .oddsBtn.selected {
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: #03150f;
   border-color: transparent;
 }

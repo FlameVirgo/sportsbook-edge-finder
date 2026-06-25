@@ -1,5 +1,6 @@
 import { formatAmerican, formatKickoff } from "../lib/format";
 import type { Event, SelectedBet } from "../types";
+import TeamLogo from "./TeamLogo";
 import styles from "./GameCard.module.css";
 
 interface GameCardProps {
@@ -27,7 +28,10 @@ export default function GameCard({ event, selectedBet, onSelectOutcome }: GameCa
 
         return (
           <div className={styles.teamRow} key={outcome}>
-            <span className={styles.teamName}>{outcome}</span>
+            <span className={styles.teamInfo}>
+              <TeamLogo name={outcome} sport={event.sport} />
+              <span className={styles.teamName}>{outcome}</span>
+            </span>
             <button
               className={`${styles.oddsBtn} ${isSelected ? styles.selected : ""}`}
               onClick={() =>

@@ -13,7 +13,7 @@ export default function Header() {
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ color: "#60a5fa" }}
+          style={{ color: "#00d68f" }}
         >
           <path d="M3 3v18h18" />
           <path d="m19 9-5 5-4-4-3 3" />

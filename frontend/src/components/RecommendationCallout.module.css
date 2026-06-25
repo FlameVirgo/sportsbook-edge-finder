@@ -5,13 +5,13 @@
 }
 
 .hasEdge {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(0, 214, 143, 0.1);
+  border: 1px solid rgba(0, 214, 143, 0.35);
 }
 
 .noEdge {
-  background: rgba(239, 68, 68, 0.06);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
 .headline {
@@ -21,11 +21,11 @@
 }
 
 .hasEdge .headline {
-  color: #047857;
+  color: var(--positive-color);
 }
 
 .noEdge .headline {
-  color: #b91c1c;
+  color: var(--danger-color);
 }
 
 .detail {

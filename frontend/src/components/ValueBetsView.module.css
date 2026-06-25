@@ -21,7 +21,7 @@
 .banner {
   font-size: 0.95rem;
   color: var(--text-primary);
-  background: #f0f9ff;
+  background: var(--table-header-bg);
   border: 1px solid var(--card-border);
   padding: 1rem 1.25rem;
   border-radius: 10px;

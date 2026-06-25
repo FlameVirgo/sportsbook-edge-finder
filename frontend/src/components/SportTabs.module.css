@@ -27,6 +27,7 @@
 
 .sportTab.active {
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: #03150f;
+  font-weight: 700;
   border-color: transparent;
 }

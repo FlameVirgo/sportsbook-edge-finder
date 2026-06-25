@@ -13,7 +13,7 @@
   border-radius: 30px;
   padding: 0.6rem 1.5rem;
   width: auto;
-  box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -28,7 +28,7 @@
   border-color: var(--accent-color);
   color: var(--accent-color);
   background: var(--hover-bg);
-  box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
 }
 
 .tabBtn:hover svg {
@@ -37,8 +37,8 @@
 
 .tabBtn.active {
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: #03150f;
   border-color: transparent;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 214, 143, 0.3);
 }

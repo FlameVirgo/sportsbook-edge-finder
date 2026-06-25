@@ -2,10 +2,8 @@ export function pct(x: number): string {
   return (x * 100).toFixed(2) + "%";
 }
 
-// Note: these classnames currently have no matching CSS rule (a
-// pre-existing no-op carried over from the prior vanilla-JS version) —
-// preserved as-is rather than introducing new styling, per "keep the
-// same look" for this migration.
+// Global classes (styled in index.css, not a CSS Module — used as
+// plain strings so they apply regardless of which component renders them).
 export function signedClass(x: number): string {
   return x >= 0 ? "value-positive" : "value-negative";
 }

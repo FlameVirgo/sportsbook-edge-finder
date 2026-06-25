@@ -1,5 +1,6 @@
 import { formatAmerican, pct } from "../lib/format";
 import type { ArbitrageOpportunity } from "../types";
+import TeamLogo from "./TeamLogo";
 import styles from "./ArbitrageOpportunityCard.module.css";
 
 interface ArbitrageOpportunityCardProps {
@@ -56,7 +57,10 @@ export default function ArbitrageOpportunityCard({
               {opportunity.outcomes.map((out) => (
                 <tr key={out.outcome}>
                   <td>
-                    <strong>{out.outcome}</strong>
+                    <span className={styles.outcomeCell}>
+                      <TeamLogo name={out.outcome} sport={opportunity.sport} />
+                      <strong>{out.outcome}</strong>
+                    </span>
                   </td>
                   <td>{out.book}</td>
                   <td>{formatAmerican(out.american_odds)}</td>

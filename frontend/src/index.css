@@ -2,22 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design Tokens & Theme Variables - Premium Light Blue Theme */
+/* Design Tokens & Theme Variables - Dark "Money Green" Sportsbook Theme */
 :root {
-  --bg-color: #e0f2fe; /* Distinct light sky blue background */
-  --card-bg: #ffffff; /* White card containers */
-  --card-border: #bae6fd; /* Soft sky blue border */
-  --text-primary: #0f172a; /* Slate 900 */
-  --text-muted: #475569; /* Slate 600 */
-  --accent-color: #0284c7; /* Sky 600 */
-  --accent-hover: #0369a1; /* Sky 700 */
-  --accent-gradient: linear-gradient(135deg, #0ea5e9, #0284c7);
-  --success-color: #10b981;
-  --danger-color: #ef4444;
-  --input-bg: #ffffff;
-  --input-border: #cbd5e1;
-  --table-header-bg: #f0f9ff;
-  --hover-bg: #f8fafc;
+  --bg-color: #0a0e14; /* Near-black background */
+  --card-bg: #161b22; /* Dark slate card containers */
+  --card-border: #2a3441; /* Subtle lighter border */
+  --text-primary: #f1f5f9; /* Near-white */
+  --text-muted: #8b96a5; /* Cool gray */
+  --accent-color: #00d68f; /* Vibrant "money green" */
+  --accent-hover: #00f5a8;
+  --accent-gradient: linear-gradient(135deg, #00d68f, #00a86b);
+  --success-color: #22c55e;
+  --positive-color: #34d399; /* Bright green for readable positive text on dark bg */
+  --danger-color: #f87171;
+  --input-bg: #1c232c;
+  --input-border: #2a3441;
+  --table-header-bg: #1c232c;
+  --hover-bg: #1f2733;
 }
 
 * {
@@ -58,28 +59,37 @@ input {
 select:focus,
 input:focus {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 214, 143, 0.25);
 }
 
 button {
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: #03150f;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.85rem 1.5rem;
   cursor: pointer;
   width: 100%;
   transition: filter 0.2s, transform 0.1s, box-shadow 0.2s;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 214, 143, 0.25);
 }
 
 button:hover {
   filter: brightness(1.1);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 6px 16px rgba(0, 214, 143, 0.35);
 }
 
 button:active {
   transform: scale(0.98);
+}
+
+.value-positive {
+  color: var(--positive-color);
+  font-weight: 600;
+}
+
+.value-negative {
+  color: var(--danger-color);
 }

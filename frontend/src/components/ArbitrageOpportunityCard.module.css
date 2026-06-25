@@ -1,15 +1,15 @@
 .card {
-  background-color: #ffffff;
+  background-color: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.1);
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.4);
 }
 
 .cardHeader {
@@ -37,7 +37,7 @@
 }
 
 .cardMeta span {
-  background: rgba(2, 132, 199, 0.08);
+  background: rgba(0, 214, 143, 0.1);
   color: var(--accent-color);
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
@@ -45,13 +45,13 @@
 }
 
 .badge {
-  background: var(--success-color);
-  color: #ffffff;
+  background: var(--accent-gradient);
+  color: #03150f;
   font-size: 0.9rem;
   font-weight: 700;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 214, 143, 0.3);
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -75,6 +75,12 @@
 
 .cardBody {
   padding: 1.5rem;
+}
+
+.outcomeCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .tableContainer {
@@ -101,8 +107,9 @@
 
 .tableContainer td {
   padding: 1rem;
-  border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+  border-bottom: 1px solid var(--card-border);
   font-size: 0.925rem;
+  color: var(--text-primary);
 }
 
 .cardFooter {
@@ -111,7 +118,7 @@
   align-items: center;
   padding: 1rem 1.5rem;
   background-color: var(--hover-bg);
-  border-top: 1px solid rgba(2, 132, 199, 0.08);
+  border-top: 1px solid var(--card-border);
   font-size: 0.9rem;
   color: var(--text-muted);
 }
@@ -121,7 +128,7 @@
 }
 
 .profitHighlight {
-  color: #047857 !important;
+  color: var(--positive-color) !important;
   font-size: 1rem;
   font-weight: 700;
 }
