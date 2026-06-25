@@ -15,11 +15,15 @@ This app requires a live odds API key — there's no mock-data fallback.
 ```bash
 cp .env.example .env
 # edit .env and set ODDS_API_KEY=<your key>
-
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
 ```
+
+### Quickest way to run it
+
+```bash
+./run.sh
+```
+
+Sets up the Python venv, builds the frontend, and starts the server at `http://localhost:8000` — no hot reload, just the simplest single-command way to see the site running.
 
 ### Development (hot reload)
 
@@ -27,6 +31,9 @@ Two processes, two terminals:
 
 ```bash
 # terminal 1 — backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 uvicorn backend.main:app --reload --port 8000
 
 # terminal 2 — frontend
