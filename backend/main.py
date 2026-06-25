@@ -63,4 +63,8 @@ def get_arbitrage(bankroll: float = 1000.0, sport: Optional[str] = None):
     return opportunities
 
 
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+_dist_dir = "frontend/dist"
+if os.path.isdir(_dist_dir):
+    app.mount("/", StaticFiles(directory=_dist_dir, html=True), name="frontend")
+# else: no built frontend yet — run `npm run dev` in frontend/ for local
+# development (it proxies /api/* to this server, see frontend/vite.config.ts)

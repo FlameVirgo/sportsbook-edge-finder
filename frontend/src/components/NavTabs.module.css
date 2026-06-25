@@ -1,0 +1,44 @@
+.navTabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tabBtn {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  font-weight: 500;
+  border-radius: 30px;
+  padding: 0.6rem 1.5rem;
+  width: auto;
+  box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tabBtn svg {
+  transition: transform 0.2s ease;
+}
+
+.tabBtn:hover {
+  filter: none;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: var(--hover-bg);
+  box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.05);
+}
+
+.tabBtn:hover svg {
+  transform: translateY(-1px);
+}
+
+.tabBtn.active {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}

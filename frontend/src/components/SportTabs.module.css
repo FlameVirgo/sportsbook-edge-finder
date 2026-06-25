@@ -1,0 +1,32 @@
+.sportTabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.sportTab {
+  width: auto;
+  flex-shrink: 0;
+  background: var(--input-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--input-border);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.sportTab:hover {
+  filter: none;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.sportTab.active {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+}
