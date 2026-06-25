@@ -19,66 +19,114 @@
       <p>Compare real-time and mock odds across sportsbooks, de-vig reference lines, and calculate Kelly stake sizes to maximize your betting edge.</p>
     </header>
 
-    <div class="dashboard-grid">
-      <!-- Selector Panel -->
-      <section id="selector-panel">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-          Configure Bet
-        </h2>
-        <div class="field-row">
-          <label for="sport-select">Sport</label>
-          <select id="sport-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="event-select">Game</label>
-          <select id="event-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="market-select">Bet</label>
-          <select id="market-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="outcome-select">Outcome</label>
-          <select id="outcome-select"></select>
-        </div>
-        <div class="field-row">
-          <label for="bankroll">Bankroll ($)</label>
-          <input type="number" id="bankroll" value="1000" min="0" step="50" />
-        </div>
-        <button id="analyze-btn">Find Best Edge</button>
-      </section>
+    <nav class="nav-tabs">
+      <button class="tab-btn active" id="tab-value-bets">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 9-5 5-4-4-3 3"/><path d="M3 3v18h18"/></svg>
+        Value Bet Finder
+      </button>
+      <button class="tab-btn" id="tab-arbitrage">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Arbitrage Finder
+      </button>
+    </nav>
 
-      <!-- Results Panel -->
-      <section id="results-panel">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
-          Edge Analysis Results
-        </h2>
-        <div id="sharp-reference-banner">Select an event and click "Find Best Edge" to compute value bets.</div>
-        <div id="bankroll-recommendation"></div>
-        <div class="table-container" style="overflow-x: auto;">
-          <table id="results-table">
-            <thead>
-              <tr>
-                <th>Book</th>
-                <th>American</th>
-                <th>Decimal</th>
-                <th>Implied %</th>
-                <th>EV</th>
-                <th>Edge</th>
-                <th>Full Kelly %</th>
-                <th>Stake $</th>
-              </tr>
-            </thead>
-            <tbody id="results-body">
-              <tr>
-                <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No analysis run yet.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+    <!-- Value Bets View -->
+    <div id="value-bets-view" class="tab-content active">
+      <div class="dashboard-grid">
+        <!-- Selector Panel -->
+        <section id="selector-panel">
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            Configure Bet
+          </h2>
+          <div class="field-row">
+            <label for="sport-select">Sport</label>
+            <select id="sport-select"></select>
+          </div>
+          <div class="field-row">
+            <label for="event-select">Game</label>
+            <select id="event-select"></select>
+          </div>
+          <div class="field-row">
+            <label for="market-select">Bet</label>
+            <select id="market-select"></select>
+          </div>
+          <div class="field-row">
+            <label for="outcome-select">Outcome</label>
+            <select id="outcome-select"></select>
+          </div>
+          <div class="field-row">
+            <label for="user-prob-override">Your probability estimate (optional, 0-1)</label>
+            <input type="number" id="user-prob-override" min="0" max="1" step="0.01" placeholder="leave blank to use sharp line" />
+          </div>
+          <div class="field-row">
+            <label for="bankroll">Bankroll ($)</label>
+            <input type="number" id="bankroll" value="1000" min="0" step="50" />
+          </div>
+          <button id="analyze-btn">Find Best Edge</button>
+        </section>
+
+        <!-- Results Panel -->
+        <section id="results-panel">
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            Edge Analysis Results
+          </h2>
+          <div id="sharp-reference-banner">Select an event and click "Find Best Edge" to compute value bets.</div>
+          <div id="bankroll-recommendation"></div>
+          <div class="table-container" style="overflow-x: auto;">
+            <table id="results-table">
+              <thead>
+                <tr>
+                  <th>Book</th>
+                  <th>American</th>
+                  <th>Decimal</th>
+                  <th>Implied %</th>
+                  <th>EV</th>
+                  <th>Edge</th>
+                  <th>Full Kelly %</th>
+                  <th>Stake $</th>
+                </tr>
+              </thead>
+              <tbody id="results-body">
+                <tr>
+                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No analysis run yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Arbitrage View -->
+    <div id="arbitrage-view" class="tab-content">
+      <div class="dashboard-grid">
+        <!-- Settings Panel -->
+        <section id="arbitrage-settings-panel">
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Configure Arbitrage
+          </h2>
+          <div class="field-row">
+            <label for="arb-bankroll">Bankroll ($)</label>
+            <input type="number" id="arb-bankroll" value="1000" min="0" step="50" />
+          </div>
+          <button id="scan-arb-btn">Scan for Arbitrage</button>
+        </section>
+
+        <!-- Arbitrage Results Panel -->
+        <section id="arbitrage-results-panel">
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Arbitrage Opportunities
+          </h2>
+          <div id="arb-summary-banner">Scan to find active arbitrage windows across sportsbooks.</div>
+          <div id="arb-list" class="opportunities-list">
+            <div style="text-align: center; color: var(--text-muted); padding: 2rem;">No scan run yet. Click "Scan for Arbitrage" to begin.</div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 
