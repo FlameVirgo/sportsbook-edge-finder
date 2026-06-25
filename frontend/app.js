@@ -1,11 +1,16 @@
 let cachedEvents = [];
 
+const sportSelect = document.getElementById("sport-select");
 const eventSelect = document.getElementById("event-select");
 const marketSelect = document.getElementById("market-select");
 const outcomeSelect = document.getElementById("outcome-select");
 
 function pct(x) {
   return (x * 100).toFixed(2) + "%";
+}
+
+function getEventsForSelectedSport() {
+  return cachedEvents.filter((e) => e.sport === sportSelect.value);
 }
 
 function getSelectedEvent() {
@@ -28,6 +33,12 @@ function populateSelect(select, items, valueKey, labelKey) {
   }
 }
 
+function onSportChange() {
+  const events = getEventsForSelectedSport();
+  populateSelect(eventSelect, events, "event_id", "event_label");
+  onEventChange();
+}
+
 function onEventChange() {
   const event = getSelectedEvent();
   populateSelect(marketSelect, event.markets, "market_id", "market_label");
@@ -48,8 +59,17 @@ function onMarketChange() {
 async function loadEvents() {
   const res = await fetch("/api/events");
   cachedEvents = await res.json();
-  populateSelect(eventSelect, cachedEvents, "event_id", "event_label");
-  onEventChange();
+
+  const sports = [...new Set(cachedEvents.map((e) => e.sport))].sort();
+  sportSelect.innerHTML = "";
+  for (const sport of sports) {
+    const opt = document.createElement("option");
+    opt.value = sport;
+    opt.textContent = sport;
+    sportSelect.appendChild(opt);
+  }
+
+  onSportChange();
 }
 
 async function runAnalysis() {
@@ -97,6 +117,7 @@ function renderResults(data) {
   });
 }
 
+sportSelect.addEventListener("change", onSportChange);
 eventSelect.addEventListener("change", onEventChange);
 marketSelect.addEventListener("change", onMarketChange);
 document.getElementById("analyze-btn").addEventListener("click", runAnalysis);

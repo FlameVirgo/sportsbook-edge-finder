@@ -7,6 +7,12 @@ from backend.odds_provider import OddsProvider
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 SHARP_BOOKMAKER_KEY = "pinnacle"
 
+SPORT_LABELS = {
+    "americanfootball_nfl": "NFL",
+    "basketball_nba": "NBA",
+    "soccer_epl": "Soccer - EPL",
+}
+
 
 class TheOddsApiProvider(OddsProvider):
     """Live moneyline (h2h) odds from The Odds API.
@@ -84,7 +90,7 @@ class TheOddsApiProvider(OddsProvider):
                 result.append({
                     "event_id": f"live_{event['id']}",
                     "event_label": f"{event['home_team']} vs {event['away_team']}",
-                    "sport": sport,
+                    "sport": SPORT_LABELS.get(sport, sport),
                     "markets": [market],
                 })
         return result
