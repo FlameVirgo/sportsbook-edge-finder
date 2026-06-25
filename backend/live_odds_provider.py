@@ -11,6 +11,7 @@ SPORT_LABELS = {
     "americanfootball_nfl": "NFL",
     "basketball_nba": "NBA",
     "soccer_epl": "Soccer - EPL",
+    "soccer_fifa_world_cup": "FIFA World Cup",
 }
 
 

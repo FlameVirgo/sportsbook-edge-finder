@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -19,7 +20,7 @@ if not _api_key:
         "ODDS_API_KEY is not set. This app requires a live odds API key — "
         "copy .env.example to .env and set ODDS_API_KEY=<your key>."
     )
-_sports = os.environ.get("ODDS_API_SPORTS", "americanfootball_nfl,basketball_nba,soccer_epl").split(",")
+_sports = os.environ.get("ODDS_API_SPORTS", "americanfootball_nfl,soccer_fifa_world_cup").split(",")
 provider = TheOddsApiProvider(_api_key, _sports)
 
 
@@ -55,8 +56,11 @@ def get_analysis(
 
 
 @app.get("/api/arbitrage", response_model=list[ArbitrageOpportunity])
-def get_arbitrage(bankroll: float = 1000.0):
-    return find_arbitrage_opportunities(provider, bankroll)
+def get_arbitrage(bankroll: float = 1000.0, sport: Optional[str] = None):
+    opportunities = find_arbitrage_opportunities(provider, bankroll)
+    if sport:
+        opportunities = [o for o in opportunities if o.sport == sport]
+    return opportunities
 
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")

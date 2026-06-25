@@ -219,10 +219,31 @@ arbBankrollInput.addEventListener("input", (e) => {
   }
 });
 
+// Arbitrage sport toggle
+const ARB_SPORTS = ["NFL", "FIFA World Cup"];
+let selectedArbSport = ARB_SPORTS[0];
+
+function renderArbSportTabs() {
+  const el = document.getElementById("arb-sport-tabs");
+  el.innerHTML = "";
+  for (const sport of ARB_SPORTS) {
+    const tab = document.createElement("button");
+    tab.className = "sport-tab" + (sport === selectedArbSport ? " active" : "");
+    tab.textContent = sport;
+    tab.addEventListener("click", () => {
+      selectedArbSport = sport;
+      renderArbSportTabs();
+      runArbitrageScan();
+    });
+    el.appendChild(tab);
+  }
+}
+renderArbSportTabs();
+
 // Run Arbitrage Scan
 async function runArbitrageScan() {
   const bankroll = parseFloat(arbBankrollInput.value) || 1000.0;
-  const res = await fetch(`/api/arbitrage?bankroll=${bankroll}`);
+  const res = await fetch(`/api/arbitrage?bankroll=${bankroll}&sport=${encodeURIComponent(selectedArbSport)}`);
   if (!res.ok) {
     const err = await res.json();
     alert(`Error scanning for arbitrage: ${err.detail}`);
