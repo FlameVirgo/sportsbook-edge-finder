@@ -25,4 +25,25 @@ class AnalysisResult(BaseModel):
     rows: list[BookRow]
 
 
-__all__ = ["BookRow", "AnalysisResult", "DevigMethod"]
+class ArbitrageOutcome(BaseModel):
+    outcome: str
+    book: str
+    american_odds: float
+    decimal_odds: float
+    implied_prob: float
+    stake: float
+
+
+class ArbitrageOpportunity(BaseModel):
+    event_id: str
+    event_label: str
+    sport: str
+    market_id: str
+    market_label: str
+    outcomes: list[ArbitrageOutcome]
+    total_implied_prob: float
+    profit_pct: float
+    profit_amount: float
+
+
+__all__ = ["BookRow", "AnalysisResult", "DevigMethod", "ArbitrageOutcome", "ArbitrageOpportunity"]

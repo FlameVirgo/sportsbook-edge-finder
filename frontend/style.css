@@ -393,3 +393,171 @@ tr:hover td {
   color: #ffffff;
   border-color: transparent;
 }
+
+/* Tab Navigation Styles */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nav-tabs .tab-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  font-weight: 500;
+  border-radius: 30px;
+  padding: 0.6rem 1.5rem;
+  width: auto;
+  box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-tabs .tab-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.nav-tabs .tab-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: var(--hover-bg);
+}
+
+.nav-tabs .tab-btn:hover svg {
+  transform: translateY(-1px);
+}
+
+.nav-tabs .tab-btn.active {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Arbitrage Opportunities Styles */
+.opportunities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.arb-card {
+  background-color: #ffffff;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.arb-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.1);
+}
+
+.arb-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--table-header-bg);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.arb-card-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.arb-card-meta {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.arb-card-meta span {
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--accent-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.arb-badge {
+  background: var(--success-color);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.arb-badge svg {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.arb-card-body {
+  padding: 1.5rem;
+}
+
+.arb-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: var(--hover-bg);
+  border-top: 1px solid rgba(2, 132, 199, 0.08);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.arb-card-footer strong {
+  color: var(--text-primary);
+}
+
+.arb-profit-highlight {
+  color: #047857 !important;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+#arb-summary-banner {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: #f0f9ff;
+  border: 1px solid var(--card-border);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+}

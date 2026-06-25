@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
-from backend.analysis import analyze_market
+from backend.analysis import analyze_market, find_arbitrage_opportunities
 from backend.devig import DevigMethod
 from backend.live_odds_provider import TheOddsApiProvider
-from backend.models import AnalysisResult
+from backend.models import AnalysisResult, ArbitrageOpportunity
 
 load_dotenv()
 
@@ -52,6 +52,11 @@ def get_analysis(
         devig_method=devig_method,
         bankroll=bankroll,
     )
+
+
+@app.get("/api/arbitrage", response_model=list[ArbitrageOpportunity])
+def get_arbitrage(bankroll: float = 1000.0):
+    return find_arbitrage_opportunities(provider, bankroll)
 
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
