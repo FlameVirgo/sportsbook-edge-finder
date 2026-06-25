@@ -98,41 +98,8 @@ function renderResults(data) {
   }
 }
 
-async function runParlayCalc() {
-  const body = {
-    p1: parseFloat(document.getElementById("parlay-p1").value),
-    p2: parseFloat(document.getElementById("parlay-p2").value),
-    rho: parseFloat(document.getElementById("parlay-rho").value),
-    parlay_decimal_odds: parseFloat(document.getElementById("parlay-odds").value),
-  };
-  const res = await fetch("/api/parlay/correlated", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const err = await res.json();
-    alert(`Error: ${JSON.stringify(err.detail)}`);
-    return;
-  }
-  renderParlayResults(await res.json());
-}
-
-function renderParlayResults(data) {
-  document.getElementById("parlay-prob-independent").textContent = pct(data.independent_prob);
-  document.getElementById("parlay-prob-correlated").textContent = pct(data.correlated_prob);
-  document.getElementById("parlay-ev-independent").textContent = pct(data.ev_naive_independent);
-  document.getElementById("parlay-ev-correlated").textContent = pct(data.ev_correlated);
-  document.getElementById("parlay-structural-edge").textContent =
-    `Structural edge from correlation: ${pct(data.structural_edge)}`;
-}
-
 eventSelect.addEventListener("change", onEventChange);
 marketSelect.addEventListener("change", onMarketChange);
 document.getElementById("analyze-btn").addEventListener("click", runAnalysis);
-document.getElementById("parlay-btn").addEventListener("click", runParlayCalc);
-document.getElementById("parlay-rho").addEventListener("input", (e) => {
-  document.getElementById("rho-readout").textContent = parseFloat(e.target.value).toFixed(2);
-});
 
 loadEvents();

@@ -87,60 +87,6 @@
         </div>
       </section>
     </div>
-
-    <!-- Parlay Panel -->
-    <section id="parlay-panel">
-      <h2>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-        DFS Correlated Parlay Calculator (2 legs)
-      </h2>
-      <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-        <div class="parlay-inputs" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;">
-          <div class="field-row">
-            <label for="parlay-p1">Leg 1 probability (0-1)</label>
-            <input type="number" id="parlay-p1" min="0" max="1" step="0.01" value="0.60" />
-          </div>
-          <div class="field-row">
-            <label for="parlay-p2">Leg 2 probability (0-1)</label>
-            <input type="number" id="parlay-p2" min="0" max="1" step="0.01" value="0.45" />
-          </div>
-          <div class="field-row">
-            <label for="parlay-rho">Correlation estimate (rho): <span id="rho-readout">0.00</span></label>
-            <input type="range" id="parlay-rho" min="-1" max="1" step="0.05" value="0" />
-          </div>
-          <div class="field-row">
-            <label for="parlay-odds">Platform parlay decimal odds</label>
-            <input type="number" id="parlay-odds" min="1.01" step="0.1" value="3.2" />
-          </div>
-        </div>
-      </div>
-      <button id="parlay-btn" style="max-width: 320px; margin-bottom: 1.5rem;">Calculate Parlay Edge</button>
-
-      <div class="table-container" style="overflow-x: auto;">
-        <table id="parlay-table">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Independent (Platform assumption)</th>
-              <th>Correlated (Your estimate)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Joint probability</td>
-              <td id="parlay-prob-independent">-</td>
-              <td id="parlay-prob-correlated">-</td>
-            </tr>
-            <tr>
-              <td>EV at platform price</td>
-              <td id="parlay-ev-independent">-</td>
-              <td id="parlay-ev-correlated">-</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div id="parlay-structural-edge">Move slider or change parameters and click Calculate to estimate parlay edge.</div>
-    </section>
   </div>
 
   <script src="app.js" defer></script>

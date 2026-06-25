@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from backend.devig import DevigMethod
 
@@ -25,20 +25,4 @@ class AnalysisResult(BaseModel):
     rows: list[BookRow]
 
 
-class ParlayRequest(BaseModel):
-    p1: float = Field(ge=0, le=1)
-    p2: float = Field(ge=0, le=1)
-    rho: float = Field(ge=-1, le=1)
-    parlay_decimal_odds: float = Field(gt=1)
-
-
-class ParlayResult(BaseModel):
-    independent_prob: float
-    correlated_prob: float
-    structural_edge: float
-    platform_implied_prob: float
-    ev_naive_independent: float
-    ev_correlated: float
-
-
-__all__ = ["BookRow", "AnalysisResult", "ParlayRequest", "ParlayResult", "DevigMethod"]
+__all__ = ["BookRow", "AnalysisResult", "DevigMethod"]

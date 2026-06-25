@@ -6,10 +6,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
 from backend.analysis import analyze_market
-from backend.correlation import correlation_edge_report
 from backend.devig import DevigMethod
 from backend.live_odds_provider import TheOddsApiProvider
-from backend.models import AnalysisResult, ParlayRequest, ParlayResult
+from backend.models import AnalysisResult
 from backend.odds_provider import CompositeOddsProvider, MockOddsProvider
 
 load_dotenv()
@@ -62,11 +61,6 @@ def get_analysis(
         kelly_multiplier=kelly_multiplier,
         bankroll=bankroll,
     )
-
-
-@app.post("/api/parlay/correlated", response_model=ParlayResult)
-def post_parlay(req: ParlayRequest):
-    return correlation_edge_report(req.p1, req.p2, req.rho, req.parlay_decimal_odds)
 
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
