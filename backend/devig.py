@@ -9,6 +9,8 @@ class DevigMethod(str, Enum):
 
 def multiplicative_devig(implied_probs: list[float]) -> list[float]:
     total = sum(implied_probs)
+    if total == 0:
+        raise ValueError("implied probabilities cannot all be zero")
     return [q / total for q in implied_probs]
 
 

@@ -92,6 +92,20 @@ The orchestration logic lives in `backend/analysis.py`.
 - `GET /api/analyze` — per-book EV/edge/Kelly table for a selected event/market/outcome
 - `GET /api/arbitrage?bankroll=&sport=` — guaranteed-profit opportunities, optionally filtered by sport
 
+## Security
+
+- `bankroll` is bounded (`0 < bankroll <= 10,000,000`) on `/api/analyze` and `/api/arbitrage`; bad input returns a 422, not a silent garbage result.
+- `/api/events` is rate-limited to 60 req/min per IP, `/api/analyze` and `/api/arbitrage` to 30 req/min per IP (`slowapi`) — protects the shared Odds API monthly quota from being burned by one abusive client.
+- CORS is off by default (frontend+backend are one app, so same-origin covers it). Set `ALLOWED_ORIGINS` (comma-separated) only if you split frontend and backend across different domains.
+- Dependencies are pinned in `requirements.txt`; Dependabot (`.github/dependabot.yml`) and GitHub vulnerability alerts are enabled on this repo for both `pip` and `npm`.
+
+### Before deploying publicly
+
+- Set `ODDS_API_KEY` / `ODDS_API_SPORTS` via your host's secret manager — never bake into a committed file or container image.
+- Confirm your host terminates HTTPS (Render/Fly/Vercel etc. all do this automatically).
+- If frontend and backend end up on different domains, set `ALLOWED_ORIGINS` to the real frontend URL.
+- Watch Odds API quota usage after launch — the current plan has a hard monthly cap.
+
 ## Scope notes
 
 - De-vig method: multiplicative only for now. Power and Shin's method are intentionally left as a strategy slot (`DevigMethod` enum in `backend/devig.py`) for later.

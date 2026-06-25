@@ -101,7 +101,7 @@ def find_arbitrage_opportunities(
             total_implied_prob = sum(info["implied_prob"] for info in best_odds.values())
 
             # An arbitrage opportunity exists if the sum of implied probabilities is less than 1 (with small buffer)
-            if total_implied_prob < 0.9999:
+            if 0 < total_implied_prob < 0.9999:
                 profit_pct = (1.0 / total_implied_prob) - 1.0
                 profit_amount = bankroll * profit_pct
 

@@ -1,8 +1,11 @@
+import logging
 from typing import Optional
 
 import requests
 
 from backend.odds_provider import OddsProvider
+
+logger = logging.getLogger(__name__)
 
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 SHARP_BOOKMAKER_KEY = "pinnacle"
@@ -50,6 +53,7 @@ class TheOddsApiProvider(OddsProvider):
                 resp.raise_for_status()
                 self._events_by_sport[sport] = resp.json()
             except requests.RequestException:
+                logger.warning("Failed to fetch odds for sport=%s from The Odds API", sport, exc_info=True)
                 self._events_by_sport[sport] = []
         return self._events_by_sport[sport]
 
