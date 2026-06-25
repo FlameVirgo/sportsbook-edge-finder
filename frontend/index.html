@@ -2,107 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sportsbook Edge Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Sportsbook Edge Finder</h1>
+  <div class="container">
+    <header>
+      <h1>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #60a5fa;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        Sportsbook Edge Finder
+      </h1>
+      <p>Compare real-time and mock odds across sportsbooks, de-vig reference lines, and calculate Kelly stake sizes to maximize your betting edge.</p>
+    </header>
 
-  <section id="selector-panel">
-    <h2>Find the best edge</h2>
-    <div class="field-row">
-      <label for="event-select">Event</label>
-      <select id="event-select"></select>
-    </div>
-    <div class="field-row">
-      <label for="market-select">Market</label>
-      <select id="market-select"></select>
-    </div>
-    <div class="field-row">
-      <label for="outcome-select">Outcome</label>
-      <select id="outcome-select"></select>
-    </div>
-    <div class="field-row">
-      <label for="user-prob-override">Your probability estimate (optional, 0-1)</label>
-      <input type="number" id="user-prob-override" min="0" max="1" step="0.01" placeholder="leave blank to use sharp line" />
-    </div>
-    <div class="field-row">
-      <label for="kelly-multiplier">Kelly multiplier</label>
-      <select id="kelly-multiplier">
-        <option value="quarter" selected>Quarter Kelly</option>
-        <option value="half">Half Kelly</option>
-        <option value="full">Full Kelly</option>
-      </select>
-    </div>
-    <div class="field-row">
-      <label for="bankroll">Bankroll ($)</label>
-      <input type="number" id="bankroll" value="1000" min="0" step="50" />
-    </div>
-    <button id="analyze-btn">Find Best Edge</button>
-  </section>
+    <div class="dashboard-grid">
+      <!-- Selector Panel -->
+      <section id="selector-panel">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          Configure Bet
+        </h2>
+        <div class="field-row">
+          <label for="event-select">Event</label>
+          <select id="event-select"></select>
+        </div>
+        <div class="field-row">
+          <label for="market-select">Market</label>
+          <select id="market-select"></select>
+        </div>
+        <div class="field-row">
+          <label for="outcome-select">Outcome</label>
+          <select id="outcome-select"></select>
+        </div>
+        <div class="field-row">
+          <label for="user-prob-override">Your probability estimate (optional, 0-1)</label>
+          <input type="number" id="user-prob-override" min="0" max="1" step="0.01" placeholder="leave blank to use sharp line" />
+        </div>
+        <div class="field-row">
+          <label for="kelly-multiplier">Kelly multiplier</label>
+          <select id="kelly-multiplier">
+            <option value="quarter" selected>Quarter Kelly</option>
+            <option value="half">Half Kelly</option>
+            <option value="full">Full Kelly</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label for="bankroll">Bankroll ($)</label>
+          <input type="number" id="bankroll" value="1000" min="0" step="50" />
+        </div>
+        <button id="analyze-btn">Find Best Edge</button>
+      </section>
 
-  <section id="results-panel">
-    <div id="sharp-reference-banner"></div>
-    <table id="results-table">
-      <thead>
-        <tr>
-          <th>Book</th>
-          <th>American</th>
-          <th>Decimal</th>
-          <th>Implied %</th>
-          <th>EV</th>
-          <th>Edge</th>
-          <th>Full Kelly %</th>
-          <th>Stake $</th>
-        </tr>
-      </thead>
-      <tbody id="results-body"></tbody>
-    </table>
-  </section>
+      <!-- Results Panel -->
+      <section id="results-panel">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+          Edge Analysis Results
+        </h2>
+        <div id="sharp-reference-banner">Select an event and click "Find Best Edge" to compute value bets.</div>
+        <div class="table-container" style="overflow-x: auto;">
+          <table id="results-table">
+            <thead>
+              <tr>
+                <th>Book</th>
+                <th>American</th>
+                <th>Decimal</th>
+                <th>Implied %</th>
+                <th>EV</th>
+                <th>Edge</th>
+                <th>Full Kelly %</th>
+                <th>Stake $</th>
+              </tr>
+            </thead>
+            <tbody id="results-body">
+              <tr>
+                <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No analysis run yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
-  <section id="parlay-panel">
-    <h2>DFS Correlated Parlay Calculator (2 legs)</h2>
-    <div class="field-row">
-      <label for="parlay-p1">Leg 1 probability (0-1)</label>
-      <input type="number" id="parlay-p1" min="0" max="1" step="0.01" value="0.60" />
-    </div>
-    <div class="field-row">
-      <label for="parlay-p2">Leg 2 probability (0-1)</label>
-      <input type="number" id="parlay-p2" min="0" max="1" step="0.01" value="0.45" />
-    </div>
-    <div class="field-row">
-      <label for="parlay-rho">Correlation estimate (rho): <span id="rho-readout">0.00</span></label>
-      <input type="range" id="parlay-rho" min="-1" max="1" step="0.05" value="0" />
-    </div>
-    <div class="field-row">
-      <label for="parlay-odds">Platform parlay decimal odds</label>
-      <input type="number" id="parlay-odds" min="1.01" step="0.1" value="3.2" />
-    </div>
-    <button id="parlay-btn">Calculate</button>
+    <!-- Parlay Panel -->
+    <section id="parlay-panel">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+        DFS Correlated Parlay Calculator (2 legs)
+      </h2>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="parlay-inputs" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;">
+          <div class="field-row">
+            <label for="parlay-p1">Leg 1 probability (0-1)</label>
+            <input type="number" id="parlay-p1" min="0" max="1" step="0.01" value="0.60" />
+          </div>
+          <div class="field-row">
+            <label for="parlay-p2">Leg 2 probability (0-1)</label>
+            <input type="number" id="parlay-p2" min="0" max="1" step="0.01" value="0.45" />
+          </div>
+          <div class="field-row">
+            <label for="parlay-rho">Correlation estimate (rho): <span id="rho-readout">0.00</span></label>
+            <input type="range" id="parlay-rho" min="-1" max="1" step="0.05" value="0" />
+          </div>
+          <div class="field-row">
+            <label for="parlay-odds">Platform parlay decimal odds</label>
+            <input type="number" id="parlay-odds" min="1.01" step="0.1" value="3.2" />
+          </div>
+        </div>
+      </div>
+      <button id="parlay-btn" style="max-width: 320px; margin-bottom: 1.5rem;">Calculate Parlay Edge</button>
 
-    <table id="parlay-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Independent (platform assumes)</th>
-          <th>Correlated (your estimate)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Joint probability</td>
-          <td id="parlay-prob-independent"></td>
-          <td id="parlay-prob-correlated"></td>
-        </tr>
-        <tr>
-          <td>EV at platform price</td>
-          <td id="parlay-ev-independent"></td>
-          <td id="parlay-ev-correlated"></td>
-        </tr>
-      </tbody>
-    </table>
-    <div id="parlay-structural-edge"></div>
-  </section>
+      <div class="table-container" style="overflow-x: auto;">
+        <table id="parlay-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Independent (Platform assumption)</th>
+              <th>Correlated (Your estimate)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Joint probability</td>
+              <td id="parlay-prob-independent">-</td>
+              <td id="parlay-prob-correlated">-</td>
+            </tr>
+            <tr>
+              <td>EV at platform price</td>
+              <td id="parlay-ev-independent">-</td>
+              <td id="parlay-ev-correlated">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="parlay-structural-edge">Move slider or change parameters and click Calculate to estimate parlay edge.</div>
+    </section>
+  </div>
 
   <script src="app.js" defer></script>
 </body>
