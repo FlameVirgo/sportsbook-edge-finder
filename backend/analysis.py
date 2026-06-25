@@ -45,7 +45,7 @@ def analyze_market(
         ))
 
     rows.sort(key=lambda r: r.edge, reverse=True)
-    rows = rows[:10]
+    rows = rows[:5]
 
     return AnalysisResult(
         sharp_book=sharp_book["book"],
