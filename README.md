@@ -1,10 +1,13 @@
 # Sportsbook Edge Finder
 
-Pick a side on a live game, and this tool compares that bet's odds across sportsbooks, de-vigs the sharpest book's line to recover a true probability estimate, and ranks the other books by expected value (EV) and Kelly-optimal stake size — surfacing whichever book offers the bettor the most edge. Also includes an Arbitrage Finder that scans for guaranteed-profit opportunities across books.
+Pick a side on a live game, and this tool compares that bet's odds across sportsbooks, de-vigs the sharpest book's line to recover a true probability estimate, and ranks the other books by expected value (EV) and Kelly-optimal stake size — surfacing whichever book offers the bettor the most edge. Also includes an Arbitrage Finder that scans for guaranteed-profit opportunities across books, user accounts with a personal bet-tracking ledger, and Stripe-subscription gating.
 
 ## Stack
 
 - Backend: Python, FastAPI
+- Database: SQLite via SQLAlchemy (`backend/db.py`) — users and bet history. `DATABASE_URL` env-overridable for a future Postgres swap.
+- Auth: self-built, JWT sessions + bcrypt (`backend/auth.py`) — no managed auth provider.
+- Payments: Stripe subscriptions (test mode), Checkout + Billing Portal hosted flows (`backend/routers/billing.py`)
 - Frontend: React + TypeScript, built with Vite, styled with Tailwind (config in place for new components) plus CSS Modules for existing ones — see `frontend/src/`
 - Data: live odds only, via [The Odds API](https://the-odds-api.com) (`backend/live_odds_provider.py`), behind an `OddsProvider` interface (`backend/odds_provider.py`) so another live provider could be swapped in later
 
@@ -59,17 +62,23 @@ Open `http://localhost:8000` — FastAPI serves the built `frontend/dist` direct
 
 ## UI
 
-Two tabs:
+Three tabs (the third only visible when logged in):
 
-- **Value Bet Finder** — pick a sport tab, then tap a side's odds button on a game card (the displayed price is Pinnacle's, the sharp reference). That immediately runs the analysis and shows a "Bet $X on Book" recommendation plus the full per-book breakdown.
-- **Arbitrage Finder** — pick a sport (NFL / FIFA World Cup) and scan for guaranteed-profit windows across books, with required stake per outcome to lock in the profit.
+- **Value Bet Finder** — pick a sport tab, then tap a side's odds button on a game card (the displayed price is Pinnacle's, the sharp reference). That immediately runs the analysis and shows a "Bet $X on Book" recommendation plus the full per-book breakdown. Requires login + an active subscription.
+- **Arbitrage Finder** — pick a sport (NFL / FIFA World Cup) and scan for guaranteed-profit windows across books, with required stake per outcome to lock in the profit. Also requires login + an active subscription.
+- **My Bets** — log bets you placed at a real sportsbook (book, odds, stake) and track win rate / net P&L over time. Only requires login, not a subscription.
+
+Account menu (top right): Log In / Sign Up when logged out; an avatar + dropdown (My Bets, Manage Subscription, Log Out) when logged in.
 
 Frontend structure (`frontend/src/`):
 
 ```
-api/client.ts          fetch wrappers for /api/events, /api/analyze, /api/arbitrage
+api/client.ts          fetch wrappers for every /api/* endpoint, incl. auth Bearer header
 lib/format.ts           pure formatting helpers (odds, percentages, kickoff times)
+lib/logos.ts            team logo / country flag URL lookup
 types.ts                shared TypeScript types mirroring backend/models.py
+context/AuthContext.tsx  auth state (token, user, login/signup/logout, auth-modal visibility)
+hooks/useAuth.ts        useAuth() hook over AuthContext
 components/             one component per UI piece, each with a co-located .module.css
 App.tsx, main.tsx       entry point
 ```
@@ -88,9 +97,12 @@ The orchestration logic lives in `backend/analysis.py`.
 
 ## API
 
-- `GET /api/events` — live games/markets/outcomes for the UI
-- `GET /api/analyze` — per-book EV/edge/Kelly table for a selected event/market/outcome
-- `GET /api/arbitrage?bankroll=&sport=` — guaranteed-profit opportunities, optionally filtered by sport
+- `GET /api/events` — live games/markets/outcomes for the UI (public)
+- `GET /api/analyze` — per-book EV/edge/Kelly table for a selected event/market/outcome (requires login + active subscription)
+- `GET /api/arbitrage?bankroll=&sport=` — guaranteed-profit opportunities, optionally filtered by sport (requires login + active subscription)
+- `POST /api/auth/{signup,login}`, `GET /api/auth/me`
+- `GET/POST /api/bets`, `PATCH/DELETE /api/bets/{id}` — personal bet ledger (requires login)
+- `POST /api/billing/{create-checkout-session,create-portal-session}`, `POST /api/billing/webhook` (Stripe)
 
 ## Security
 
@@ -98,6 +110,10 @@ The orchestration logic lives in `backend/analysis.py`.
 - `/api/events` is rate-limited to 60 req/min per IP, `/api/analyze` and `/api/arbitrage` to 30 req/min per IP (`slowapi`) — protects the shared Odds API monthly quota from being burned by one abusive client.
 - CORS is off by default (frontend+backend are one app, so same-origin covers it). Set `ALLOWED_ORIGINS` (comma-separated) only if you split frontend and backend across different domains.
 - Dependencies are pinned in `requirements.txt`; Dependabot (`.github/dependabot.yml`) and GitHub vulnerability alerts are enabled on this repo for both `pip` and `npm`.
+
+### Accounts & payments setup
+
+Required: `JWT_SECRET` (any long random string) and `DATABASE_URL` (defaults to a local `sqlite:///./app.db` file, gitignored). Stripe is optional for local dev — billing endpoints return a clean 503 until you set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, and `STRIPE_WEBHOOK_SECRET` (create a test-mode Stripe account, a test Product+Price, and use the Stripe CLI — `stripe listen --forward-to localhost:8000/api/billing/webhook` — for local webhook testing). Everything else (signup, login, bet ledger, the subscription gate itself) works fully without Stripe configured.
 
 ### Before deploying publicly
 
@@ -112,5 +128,4 @@ The orchestration logic lives in `backend/analysis.py`.
 - Odds data: live moneyline only — no spreads, totals, or player props yet (different point lines per book and a separate per-event API endpoint, respectively).
 - Single-leg bets only — no multi-leg parlay/correlation modeling.
 - No Storybook or component tests yet — the TypeScript + one-component-per-file structure makes both straightforward to add later.
-
-See `PLAN.md` for the original design plan.
+- No password reset / email verification flow yet for the self-built auth.
