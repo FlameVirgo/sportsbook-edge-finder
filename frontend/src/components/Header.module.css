@@ -1,5 +1,23 @@
 .header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 2.5rem;
+}
+
+.headerSpacer {
+  width: 0;
+}
+
+@media (min-width: 640px) {
+  .headerSpacer {
+    width: 100px;
+  }
+}
+
+.titleBlock {
+  flex: 1;
   text-align: center;
 }
 
@@ -21,4 +39,20 @@
   margin: 0 auto;
   max-width: 700px;
   line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .title {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
 }

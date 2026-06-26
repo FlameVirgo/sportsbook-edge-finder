@@ -3,17 +3,22 @@ import os
 from typing import Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
 
 from backend.analysis import analyze_market, find_arbitrage_opportunities
+from backend.auth import auth_router, require_active_subscription
+from backend.db import init_db
+from backend.db_models import User
 from backend.devig import DevigMethod
 from backend.live_odds_provider import TheOddsApiProvider
 from backend.models import AnalysisResult, ArbitrageOpportunity
+from backend.rate_limit import limiter
+from backend.routers.bets import bets_router
+from backend.routers.billing import billing_router
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
@@ -21,9 +26,10 @@ load_dotenv()
 
 app = FastAPI(title="Sportsbook Edge Finder")
 
-limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+init_db()
 
 # Comma-separated list of allowed cross-origin domains, e.g. if the frontend
 # is ever deployed separately from this backend. Empty by default — same
@@ -33,7 +39,7 @@ if _allowed_origins:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=_allowed_origins,
-        allow_methods=["GET"],
+        allow_methods=["GET", "POST", "PATCH", "DELETE"],
         allow_headers=["*"],
     )
 
@@ -45,6 +51,10 @@ if not _api_key:
     )
 _sports = os.environ.get("ODDS_API_SPORTS", "americanfootball_nfl,soccer_fifa_world_cup").split(",")
 provider = TheOddsApiProvider(_api_key, _sports)
+
+app.include_router(auth_router)
+app.include_router(bets_router)
+app.include_router(billing_router)
 
 
 @app.get("/api/events")
@@ -62,6 +72,7 @@ def get_analysis(
     outcome: str,
     devig_method: DevigMethod = DevigMethod.MULTIPLICATIVE,
     bankroll: float = Query(default=1000.0, gt=0, le=10_000_000),
+    _user: User = Depends(require_active_subscription),
 ):
     try:
         market = provider.get_market(event_id, market_id)
@@ -90,6 +101,7 @@ def get_arbitrage(
     request: Request,
     bankroll: float = Query(default=1000.0, gt=0, le=10_000_000),
     sport: Optional[str] = None,
+    _user: User = Depends(require_active_subscription),
 ):
     opportunities = find_arbitrage_opportunities(provider, bankroll)
     if sport:

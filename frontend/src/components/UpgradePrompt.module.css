@@ -1,0 +1,64 @@
+.card {
+  border: 1px solid var(--accent-color);
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(0, 214, 143, 0.1), rgba(0, 168, 107, 0.04));
+  padding: 2rem;
+  text-align: center;
+}
+
+.planName {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+
+.price {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.headline {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0.75rem 0 1.25rem;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.features svg {
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.cta {
+  max-width: 280px;
+  margin: 0 auto;
+}

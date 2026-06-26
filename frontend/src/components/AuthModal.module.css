@@ -1,0 +1,113 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.closeBtn {
+  width: auto;
+  background: none;
+  box-shadow: none;
+  padding: 0.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+}
+
+.closeBtn:hover {
+  filter: none;
+  color: var(--text-primary);
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+}
+
+.passwordWrap {
+  position: relative;
+}
+
+.passwordWrap input {
+  padding-right: 2.5rem;
+}
+
+.toggleVisibility {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  background: none;
+  box-shadow: none;
+  padding: 0.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+}
+
+.toggleVisibility:hover {
+  filter: none;
+  color: var(--text-primary);
+}
+
+.error {
+  color: var(--danger-color);
+  font-size: 0.85rem;
+  margin: -0.3rem 0 1rem;
+}
+
+.switchMode {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 1.25rem;
+}
+
+.switchMode button {
+  width: auto;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  color: var(--accent-color);
+  font-weight: 600;
+  font-size: inherit;
+  cursor: pointer;
+  display: inline;
+}
+
+.switchMode button:hover {
+  filter: none;
+  text-decoration: underline;
+}

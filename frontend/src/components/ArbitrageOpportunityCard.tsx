@@ -1,3 +1,4 @@
+import { TrendingUp } from "lucide-react";
 import { formatAmerican, pct } from "../lib/format";
 import type { ArbitrageOpportunity } from "../types";
 import TeamLogo from "./TeamLogo";
@@ -23,19 +24,7 @@ export default function ArbitrageOpportunityCard({
           </div>
         </div>
         <div className={styles.badge}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="12" y1="1" x2="12" y2="23" />
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-          </svg>
+          <TrendingUp size={16} strokeWidth={2.5} />
           +{pct(opportunity.profit_pct)} Profit
         </div>
       </div>

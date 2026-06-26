@@ -71,3 +71,40 @@ export interface SelectedBet {
   marketId: string;
   outcome: string;
 }
+
+export interface UserResponse {
+  id: number;
+  email: string;
+  subscription_status: string;
+  created_at: string;
+}
+
+export type BetOutcome = "pending" | "win" | "loss" | "push";
+
+export interface LoggedBet {
+  id: number;
+  sportsbook: string;
+  market_description: string;
+  american_odds: number;
+  stake: number;
+  outcome: BetOutcome;
+  placed_at: string;
+  settled_at: string | null;
+  notes: string | null;
+}
+
+export interface LoggedBetCreate {
+  sportsbook: string;
+  market_description: string;
+  american_odds: number;
+  stake: number;
+  outcome?: BetOutcome;
+  placed_at: string;
+  notes?: string | null;
+}
+
+export interface LoggedBetUpdate {
+  outcome?: BetOutcome;
+  settled_at?: string | null;
+  notes?: string | null;
+}

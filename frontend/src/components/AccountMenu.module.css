@@ -1,0 +1,88 @@
+.accountMenu {
+  position: relative;
+}
+
+.authButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.authButtons button {
+  width: auto;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.1rem;
+}
+
+.signUpBtn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+.signUpBtn:hover {
+  filter: none;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.avatarBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  color: #03150f;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: none;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  min-width: 200px;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.dropdownEmail {
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--card-border);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownItem {
+  width: 100%;
+  background: none;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: background-color 150ms;
+}
+
+.dropdownItem:hover {
+  filter: none;
+  background: var(--hover-bg);
+}
