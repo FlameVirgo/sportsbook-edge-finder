@@ -107,7 +107,11 @@ The orchestration logic lives in `backend/analysis.py`.
 ## Security
 
 - `bankroll` is bounded (`0 < bankroll <= 10,000,000`) on `/api/analyze` and `/api/arbitrage`; bad input returns a 422, not a silent garbage result.
-- `/api/events` is rate-limited to 60 req/min per IP, `/api/analyze` and `/api/arbitrage` to 30 req/min per IP (`slowapi`) — protects the shared Odds API monthly quota from being burned by one abusive client.
+- Every endpoint is rate-limited per IP (`slowapi`): 60/min on `/api/events` and the bet-ledger reads, 30/min on `/api/analyze`, `/api/arbitrage`, and bet-ledger writes, 10/min on auth (`signup`/`login`/`google`) and billing (Stripe checkout/portal session creation). This protects both the shared Odds API quota and against credential-stuffing / Stripe-session-spam from one abusive client. The Stripe webhook is intentionally not IP-rate-limited — it's already authenticated via signature verification, and limiting it risks dropping legitimate events under load.
+- Login timing is normalized (a dummy bcrypt comparison runs even when the email doesn't exist) so response time can't be used to enumerate registered accounts.
+- `JWT_SECRET` must be at least 32 characters — the app refuses to start with a weak signing secret, since that secret is what lets an attacker forge login sessions.
+- Google sign-in tokens are verified server-side (signature, audience, issuer, expiry, `email_verified`) before being trusted; the google-auth library's failure modes are mapped to a clean 401 instead of an unhandled 500.
+- Baseline security response headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`) are set on every response.
 - CORS is off by default (frontend+backend are one app, so same-origin covers it). Set `ALLOWED_ORIGINS` (comma-separated) only if you split frontend and backend across different domains.
 - Dependencies are pinned in `requirements.txt`; Dependabot (`.github/dependabot.yml`) and GitHub vulnerability alerts are enabled on this repo for both `pip` and `npm`.
 
@@ -123,6 +127,7 @@ Google sign-in is also optional. Create an OAuth 2.0 Client ID (type: Web applic
 - Confirm your host terminates HTTPS (Render/Fly/Vercel etc. all do this automatically).
 - If frontend and backend end up on different domains, set `ALLOWED_ORIGINS` to the real frontend URL.
 - Watch Odds API quota usage after launch — the current plan has a hard monthly cap.
+- Per-IP rate limiting (`slowapi`) keys off the client socket's IP. If you put this behind a reverse proxy/load balancer that doesn't forward the real client IP transparently (most PaaS hosts, e.g. Render/Fly, do), every client would share one rate-limit bucket — check your host's docs before launch.
 
 ## Scope notes
 

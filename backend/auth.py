@@ -5,6 +5,7 @@ import bcrypt
 import jwt
 from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from google.auth import exceptions as google_exceptions
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
 from sqlalchemy.orm import Session
@@ -22,10 +23,21 @@ if not JWT_SECRET:
         "JWT_SECRET is not set. This app requires a secret key to sign login sessions — "
         "set JWT_SECRET in your .env (any long random string)."
     )
+if len(JWT_SECRET) < 32:
+    raise RuntimeError(
+        "JWT_SECRET is too short (must be at least 32 characters) — a weak secret lets "
+        "an attacker forge login sessions. Generate one with: python -c "
+        "\"import secrets; print(secrets.token_urlsafe(32))\""
+    )
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY = timedelta(days=7)
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
+
+# A real bcrypt hash with no matching password, used to make failed logins for
+# a nonexistent email take the same time as a wrong-password login — without
+# this, response timing would let an attacker enumerate registered emails.
+_DUMMY_HASH = bcrypt.hashpw(b"", bcrypt.gensalt()).decode("utf-8")
 
 
 def hash_password(password: str) -> str:
@@ -89,9 +101,9 @@ def signup(request: Request, body: SignupRequest, db: Session = Depends(get_db))
 @limiter.limit("10/minute")
 def login(request: Request, body: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == body.email).first()
-    if user is None or user.hashed_password is None:
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
-    if not verify_password(body.password, user.hashed_password):
+    hashed = user.hashed_password if user and user.hashed_password else _DUMMY_HASH
+    password_ok = verify_password(body.password, hashed)
+    if user is None or user.hashed_password is None or not password_ok:
         raise HTTPException(status_code=401, detail="Incorrect email or password")
     return TokenResponse(access_token=create_access_token(user.id))
 
@@ -106,7 +118,11 @@ def google_login(request: Request, body: GoogleAuthRequest, db: Session = Depend
         payload = google_id_token.verify_oauth2_token(
             body.credential, google_requests.Request(), GOOGLE_CLIENT_ID
         )
-    except ValueError:
+    except (ValueError, google_exceptions.GoogleAuthError):
+        # ValueError: malformed/expired/bad-signature/wrong-audience token.
+        # GoogleAuthError: wrong issuer, or transport failure fetching Google's
+        # signing certs. All are either an invalid credential or a transient
+        # issue on our end — neither should surface as an unhandled 500.
         raise HTTPException(status_code=401, detail="Invalid Google credential")
 
     if not payload.get("email_verified"):

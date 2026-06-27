@@ -11,6 +11,7 @@ from backend.auth import get_current_user
 from backend.db import get_db
 from backend.db_models import User
 from backend.models import CheckoutSessionResponse
+from backend.rate_limit import limiter
 
 load_dotenv()
 
@@ -25,7 +26,10 @@ billing_router = APIRouter(prefix="/api/billing", tags=["billing"])
 
 
 @billing_router.post("/create-checkout-session", response_model=CheckoutSessionResponse)
-def create_checkout_session(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+def create_checkout_session(
+    request: Request, user: User = Depends(get_current_user), db: Session = Depends(get_db)
+):
     if not stripe.api_key or not STRIPE_PRICE_ID:
         raise HTTPException(status_code=503, detail="Billing is not configured yet")
 
@@ -45,7 +49,8 @@ def create_checkout_session(user: User = Depends(get_current_user), db: Session 
 
 
 @billing_router.post("/create-portal-session", response_model=CheckoutSessionResponse)
-def create_portal_session(user: User = Depends(get_current_user)):
+@limiter.limit("10/minute")
+def create_portal_session(request: Request, user: User = Depends(get_current_user)):
     if not user.stripe_customer_id:
         raise HTTPException(status_code=400, detail="No billing account found for this user yet")
 
