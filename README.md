@@ -4,7 +4,7 @@ Pick a side on a live game, and this tool compares that bet's odds across sports
 
 ## Stack
 
-- Backend: Python, FastAPI
+- Backend: Python 3.10+, FastAPI (pinned `requests` version requires it — `python3 -m venv` on an older default Python will fail at install)
 - Database: SQLite via SQLAlchemy (`backend/db.py`) — users and bet history. `DATABASE_URL` env-overridable for a future Postgres swap.
 - Auth: self-built, JWT sessions + bcrypt (`backend/auth.py`), plus optional Google sign-in (Google Identity Services, verified server-side) — no managed auth provider.
 - Payments: Stripe subscriptions (test mode), Checkout + Billing Portal hosted flows (`backend/routers/billing.py`)
@@ -33,8 +33,8 @@ Sets up the Python venv, builds the frontend, and starts the server at `http://l
 Two processes, two terminals:
 
 ```bash
-# terminal 1 — backend
-python3 -m venv .venv
+# terminal 1 — backend (needs Python 3.10+; macOS's system python3 is often older)
+python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn backend.main:app --reload --port 8000
