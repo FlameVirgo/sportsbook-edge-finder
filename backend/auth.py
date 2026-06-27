@@ -5,11 +5,13 @@ import bcrypt
 import jwt
 from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from google.auth.transport import requests as google_requests
+from google.oauth2 import id_token as google_id_token
 from sqlalchemy.orm import Session
 
 from backend.db import get_db
 from backend.db_models import User
-from backend.models import LoginRequest, SignupRequest, TokenResponse, UserResponse
+from backend.models import GoogleAuthRequest, LoginRequest, SignupRequest, TokenResponse, UserResponse
 from backend.rate_limit import limiter
 
 load_dotenv()
@@ -22,6 +24,8 @@ if not JWT_SECRET:
     )
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY = timedelta(days=7)
+
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
 
 
 def hash_password(password: str) -> str:
@@ -85,8 +89,45 @@ def signup(request: Request, body: SignupRequest, db: Session = Depends(get_db))
 @limiter.limit("10/minute")
 def login(request: Request, body: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == body.email).first()
-    if user is None or not verify_password(body.password, user.hashed_password):
+    if user is None or user.hashed_password is None:
         raise HTTPException(status_code=401, detail="Incorrect email or password")
+    if not verify_password(body.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    return TokenResponse(access_token=create_access_token(user.id))
+
+
+@auth_router.post("/google", response_model=TokenResponse)
+@limiter.limit("10/minute")
+def google_login(request: Request, body: GoogleAuthRequest, db: Session = Depends(get_db)):
+    if not GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=503, detail="Google sign-in is not configured yet")
+
+    try:
+        payload = google_id_token.verify_oauth2_token(
+            body.credential, google_requests.Request(), GOOGLE_CLIENT_ID
+        )
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Invalid Google credential")
+
+    if not payload.get("email_verified"):
+        raise HTTPException(status_code=401, detail="Google account email is not verified")
+
+    google_sub = payload["sub"]
+    email = payload["email"]
+
+    user = db.query(User).filter(User.google_sub == google_sub).first()
+    if user is None:
+        # Same email already has a password account — link Google to it
+        # rather than creating a duplicate.
+        user = db.query(User).filter(User.email == email).first()
+        if user is not None:
+            user.google_sub = google_sub
+        else:
+            user = User(email=email, hashed_password=None, google_sub=google_sub)
+            db.add(user)
+        db.commit()
+        db.refresh(user)
+
     return TokenResponse(access_token=create_access_token(user.id))
 
 

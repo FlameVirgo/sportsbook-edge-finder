@@ -4,14 +4,18 @@ import { ApiError } from "../api/client";
 import { useAuth } from "../hooks/useAuth";
 import styles from "./AuthModal.module.css";
 
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 export default function AuthModal() {
-  const { authModalMode: mode, openAuthModal, closeAuthModal, login, signup } = useAuth();
+  const { authModalMode: mode, openAuthModal, closeAuthModal, login, signup, loginWithGoogle } =
+    useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const googleBtnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -20,6 +24,25 @@ export default function AuthModal() {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [closeAuthModal]);
+
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID || !window.google || !googleBtnRef.current) return;
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: ({ credential }) => {
+        setError(null);
+        loginWithGoogle(credential).catch((err) => {
+          setError(err instanceof ApiError ? err.message : "Google sign-in failed");
+        });
+      },
+    });
+    window.google.accounts.id.renderButton(googleBtnRef.current, {
+      theme: "outline",
+      size: "large",
+      width: 332,
+      text: mode === "login" ? "signin_with" : "signup_with",
+    });
+  }, [mode, loginWithGoogle]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,6 +73,15 @@ export default function AuthModal() {
             <X size={20} />
           </button>
         </div>
+
+        {GOOGLE_CLIENT_ID && (
+          <>
+            <div ref={googleBtnRef} className={styles.googleBtn} />
+            <div className={styles.divider}>
+              <span>or</span>
+            </div>
+          </>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.fieldRow}>

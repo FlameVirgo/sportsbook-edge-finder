@@ -16,7 +16,9 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
-    hashed_password: Mapped[str] = mapped_column(String, nullable=False)
+    # Nullable: accounts created via Google sign-in have no password.
+    hashed_password: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    google_sub: Mapped[Optional[str]] = mapped_column(String, unique=True, index=True, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
     stripe_customer_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     stripe_subscription_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)

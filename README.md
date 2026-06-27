@@ -6,7 +6,7 @@ Pick a side on a live game, and this tool compares that bet's odds across sports
 
 - Backend: Python, FastAPI
 - Database: SQLite via SQLAlchemy (`backend/db.py`) — users and bet history. `DATABASE_URL` env-overridable for a future Postgres swap.
-- Auth: self-built, JWT sessions + bcrypt (`backend/auth.py`) — no managed auth provider.
+- Auth: self-built, JWT sessions + bcrypt (`backend/auth.py`), plus optional Google sign-in (Google Identity Services, verified server-side) — no managed auth provider.
 - Payments: Stripe subscriptions (test mode), Checkout + Billing Portal hosted flows (`backend/routers/billing.py`)
 - Frontend: React + TypeScript, built with Vite, styled with Tailwind (config in place for new components) plus CSS Modules for existing ones — see `frontend/src/`
 - Data: live odds only, via [The Odds API](https://the-odds-api.com) (`backend/live_odds_provider.py`), behind an `OddsProvider` interface (`backend/odds_provider.py`) so another live provider could be swapped in later
@@ -100,7 +100,7 @@ The orchestration logic lives in `backend/analysis.py`.
 - `GET /api/events` — live games/markets/outcomes for the UI (public)
 - `GET /api/analyze` — per-book EV/edge/Kelly table for a selected event/market/outcome (requires login + active subscription)
 - `GET /api/arbitrage?bankroll=&sport=` — guaranteed-profit opportunities, optionally filtered by sport (requires login + active subscription)
-- `POST /api/auth/{signup,login}`, `GET /api/auth/me`
+- `POST /api/auth/{signup,login,google}`, `GET /api/auth/me`
 - `GET/POST /api/bets`, `PATCH/DELETE /api/bets/{id}` — personal bet ledger (requires login)
 - `POST /api/billing/{create-checkout-session,create-portal-session}`, `POST /api/billing/webhook` (Stripe)
 
@@ -114,6 +114,8 @@ The orchestration logic lives in `backend/analysis.py`.
 ### Accounts & payments setup
 
 Required: `JWT_SECRET` (any long random string) and `DATABASE_URL` (defaults to a local `sqlite:///./app.db` file, gitignored). Stripe is optional for local dev — billing endpoints return a clean 503 until you set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, and `STRIPE_WEBHOOK_SECRET` (create a test-mode Stripe account, a test Product+Price, and use the Stripe CLI — `stripe listen --forward-to localhost:8000/api/billing/webhook` — for local webhook testing). Everything else (signup, login, bet ledger, the subscription gate itself) works fully without Stripe configured.
+
+Google sign-in is also optional. Create an OAuth 2.0 Client ID (type: Web application) at the [Google Cloud Console](https://console.cloud.google.com/apis/credentials), add `http://localhost:5173` and `http://localhost:8000` as authorized JavaScript origins for local dev, and set `GOOGLE_CLIENT_ID` in the backend's `.env` and `VITE_GOOGLE_CLIENT_ID` in `frontend/.env` to the same value (it's a public client ID, not a secret). The `/api/auth/google` endpoint returns a clean 503 and the frontend just hides the Google button until both are set. The backend verifies the Google ID token's signature, audience, and `email_verified` claim before trusting it; a Google sign-in with the same email as an existing password account links to that account rather than creating a duplicate.
 
 ### Before deploying publicly
 

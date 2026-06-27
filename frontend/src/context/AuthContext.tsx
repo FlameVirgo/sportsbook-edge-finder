@@ -9,6 +9,7 @@ export interface AuthContextValue {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: (credential: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
   authModalOpen: boolean;
@@ -77,6 +78,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     closeAuthModal();
   }
 
+  async function loginWithGoogle(credential: string) {
+    const { access_token } = await api.googleLogin(credential);
+    localStorage.setItem("token", access_token);
+    await refreshUser();
+    closeAuthModal();
+  }
+
   function logout() {
     localStorage.removeItem("token");
     setUser(null);
@@ -89,6 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         login,
         signup,
+        loginWithGoogle,
         logout,
         refreshUser,
         authModalOpen,

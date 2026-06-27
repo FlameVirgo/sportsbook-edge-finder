@@ -75,6 +75,10 @@ export function login(email: string, password: string): Promise<{ access_token: 
   return request("/api/auth/login", { method: "POST", body: { email, password } });
 }
 
+export function googleLogin(credential: string): Promise<{ access_token: string }> {
+  return request("/api/auth/google", { method: "POST", body: { credential } });
+}
+
 export function getCurrentUser(): Promise<UserResponse> {
   return request<UserResponse>("/api/auth/me", { auth: true });
 }

@@ -58,6 +58,10 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class GoogleAuthRequest(BaseModel):
+    credential: str
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
@@ -115,6 +119,6 @@ class CheckoutSessionResponse(BaseModel):
 
 __all__ = [
     "BookRow", "AnalysisResult", "DevigMethod", "ArbitrageOutcome", "ArbitrageOpportunity",
-    "SignupRequest", "LoginRequest", "TokenResponse", "UserResponse",
+    "SignupRequest", "LoginRequest", "GoogleAuthRequest", "TokenResponse", "UserResponse",
     "BetOutcome", "BetCreate", "BetUpdate", "BetResponse", "CheckoutSessionResponse",
 ]

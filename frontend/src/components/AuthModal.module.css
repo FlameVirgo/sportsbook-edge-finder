@@ -48,6 +48,32 @@
   color: var(--text-primary);
 }
 
+.googleBtn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 1.25rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.divider span {
+  padding: 0 0.75rem;
+}
+
 .fieldRow {
   display: flex;
   flex-direction: column;
