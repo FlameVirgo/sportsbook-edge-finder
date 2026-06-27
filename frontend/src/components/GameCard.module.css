@@ -18,6 +18,13 @@
   border-radius: 10px;
   padding: 0.75rem 1rem;
   background: var(--card-bg);
+  transition: border-color 200ms, box-shadow 200ms, transform 200ms;
+}
+
+.gameCard:hover {
+  border-color: var(--input-border);
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
 }
 
 .gameCardHeader {

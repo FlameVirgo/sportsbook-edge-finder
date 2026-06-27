@@ -1,4 +1,4 @@
-import { Eye, EyeOff, X } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, TrendingUp, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../api/client";
 import { useAuth } from "../hooks/useAuth";
@@ -67,11 +67,20 @@ export default function AuthModal() {
       onClick={(e) => e.target === e.currentTarget && closeAuthModal()}
     >
       <div className={styles.modal} role="dialog" aria-modal="true" ref={dialogRef}>
+        <button className={styles.closeBtn} onClick={closeAuthModal} aria-label="Close">
+          <X size={20} />
+        </button>
+
         <div className={styles.header}>
-          <h2 className={styles.title}>{mode === "login" ? "Log In" : "Sign Up"}</h2>
-          <button className={styles.closeBtn} onClick={closeAuthModal} aria-label="Close">
-            <X size={20} />
-          </button>
+          <div className={styles.brandIcon}>
+            <TrendingUp size={22} />
+          </div>
+          <h2 className={styles.title}>{mode === "login" ? "Welcome back" : "Create your account"}</h2>
+          <p className={styles.subtitle}>
+            {mode === "login"
+              ? "Log in to access live edge analysis and your bet ledger."
+              : "Sign up to start tracking value bets and arbitrage."}
+          </p>
         </div>
 
         {GOOGLE_CLIENT_ID && (
@@ -86,18 +95,22 @@ export default function AuthModal() {
         <form onSubmit={handleSubmit}>
           <div className={styles.fieldRow}>
             <label htmlFor="auth-email">Email</label>
-            <input
-              id="auth-email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <div className={styles.inputWrap}>
+              <Mail size={16} className={styles.fieldIcon} />
+              <input
+                id="auth-email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
           </div>
           <div className={styles.fieldRow}>
             <label htmlFor="auth-password">Password</label>
-            <div className={styles.passwordWrap}>
+            <div className={styles.inputWrap}>
+              <Lock size={16} className={styles.fieldIcon} />
               <input
                 id="auth-password"
                 type={showPassword ? "text" : "password"}

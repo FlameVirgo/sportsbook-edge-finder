@@ -11,10 +11,11 @@
   width: auto;
   font-size: 0.85rem;
   padding: 0.55rem 1.1rem;
+  transition: background-color 150ms, border-color 150ms, color 150ms, filter 150ms, box-shadow 150ms;
 }
 
 .signUpBtn {
-  background: transparent;
+  background: var(--card-bg);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
   box-shadow: none;
@@ -24,6 +25,7 @@
   filter: none;
   border-color: var(--accent-color);
   color: var(--accent-color);
+  background: var(--hover-bg);
 }
 
 .avatarBtn {
